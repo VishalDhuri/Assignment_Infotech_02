@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+			background-image: url("https://wallpapercave.com/wp/wp3668876.jpg");
+            background-size: 100%;
+        }
+		
+		#watchname{
+            position: absolute;
+            font-size: 3em;
+            left: 18%;
+            top: 30%;
+		}
+		
+        #stopwatch {
+            position: absolute;
+            font-size: 2.3em;
+			left: 24%;
+            top: 42%;
+        }
+
+        #controls {
+            position: absolute;
+            margin-top: 20px;
+			left: 16.5%;
+            top: 50%;
+        }
+
+        button {
+            font-size: 0.9em;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+
+        #controls button.btn1:hover {
+            background-color: rgb(45, 41, 49);
+            color: #fff;
+        }
+
+        #controls button.btn2:hover {
+            background-color: rgb(45, 41, 49);
+            color: #fff;
+        }
+
+        #controls button.btn3:hover {
+            background-color:rgb(45, 41, 49);
+            color: #fff;
+        }
+
+        #controls button.btn4:hover {
+            background-color: rgb(45, 41, 49);
+            color: #fff;
+        }
+
+
+        #lapTimes {
+            position: absolute;
+            font-size: 1.2em;
+            left: 23.5%;
+            top: 60%;
+            
+        }
+    </style>
+    <title>Stopwatch</title>
+</head>
+<body>
+    <div id="watchname">STOPWATCH</div>
+    <div id="stopwatch">0:00:00</div>
+    <div id="controls">
+        <button onclick="startStopwatch()" class="btn1">Start</button>
+        <button onclick="pauseStopwatch()" class="btn2">Pause</button>
+        <button onclick="resetStopwatch()" class="btn3">Reset</button>
+        <button onclick="recordLap()" class="btn4">Lap</button>
+    </div>
+    <div id="lapTimes"></div>
+
+    <script>
+        let timer;
+        let seconds = 0, minutes = 0, hours = 0;
+        let lapTimes = [];
+
+        function startStopwatch() {
+            timer = setInterval(updateStopwatch, 1000);
+        }
+
+        function pauseStopwatch() {
+            clearInterval(timer);
+        }
+
+        function resetStopwatch() {
+            clearInterval(timer);
+            seconds = -1;
+            minutes = 0;
+            hours = 0;
+            lapTimes = [];
+            updateStopwatch();
+            updateLapTimes();
+        }
+
+        function recordLap() {
+            const lapTime = { hours, minutes, seconds };
+            lapTimes.push(lapTime);
+            updateLapTimes();
+        }
+
+        function updateStopwatch() {
+            seconds++;
+            if (seconds === 60) {
+                seconds = 0;
+                minutes++;
+                if (minutes === 60) {
+                    minutes = 0;
+                    hours++;
+                }
+            }
+
+            const formattedTime = `${hours}:${padNumber(minutes)}:${padNumber(seconds)}`;
+            document.getElementById("stopwatch").innerText = formattedTime;
+        }
+
+        function updateLapTimes() {
+            const lapTimesContainer = document.getElementById("lapTimes");
+            lapTimesContainer.innerHTML = "<h3>Lap Times</h3>";
+
+            lapTimes.forEach((lap, index) => {
+                const lapTime = `${lap.hours}:${padNumber(lap.minutes)}:${padNumber(lap.seconds)}`;
+                const lapItem = document.createElement("div");
+                lapItem.innerText = `Lap ${index + 1}: ${lapTime}`;
+                lapTimesContainer.appendChild(lapItem);
+            });
+        }
+
+        function padNumber(number) {
+            return number < 10 ? "0" + number : number;
+        }
+    </script>
+</body>
+</html>
